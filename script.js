@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const foodList = document.getElementById('foodList');
     const sortButton = document.getElementById('sortButton');
     const quantityInput = document.getElementById('quantityInput'); // Get the new quantity input
+        const chartContainer = document.getElementById('chartContainer'); // Get the chart container
 
     let foodData = [];
     let currentFoodId = null;
     let sortOrder = 'asc';
+    let macroChart = null; // Variable to hold the chart instance
 
     fetch('food.jsonl')
         .then(response => response.text())
@@ -105,6 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const finalFats = measure.fats * quantity;
         const finalFibre = measure.fibre * quantity;
 
+        const caloriesFromCarbs = finalCarbs * 4;
+    const caloriesFromProtein = finalProteins * 4;
+    const caloriesFromFat = finalFats * 9;
+    const totalCalories = caloriesFromCarbs + caloriesFromProtein + caloriesFromFat;
+
+
         nutrientInfo.innerHTML = `
             <h3>Macronutrients</h3>
             <div class="nutrients-grid">
@@ -150,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             micronutrientDetails.innerHTML = '';
         }
+        
     }
 
     // Function to trigger the calculation and display update

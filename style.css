@@ -133,8 +133,8 @@ input[type="text"]:focus, select:focus {
 
 .nutrients-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr; /* Was '1fr 1fr' */
-    gap: 1rem;
+ grid-template-columns: 1fr 1fr;   
+  gap: 1rem;
 }
 
 .nutrient-item {
@@ -363,6 +363,7 @@ input[type="text"]:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
 
+
 /* ------------------------------------------- */
 /* NEW DESKTOP STYLES USING A MEDIA QUERY      */
 /* ------------------------------------------- */
@@ -393,5 +394,11 @@ input[type="text"]:focus, select:focus {
     }
     .card-body, .card-header {
         padding: 1.5rem;
+    }
+}
+@media (min-width: 768px) {
+    .nutrients-grid {
+        /* Switch back to four columns for the smaller items */
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }
