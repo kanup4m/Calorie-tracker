@@ -1,0 +1,365 @@
+/* Import Font */
+:root {
+    --primary-color: #4CAF50; /* A fresh green */
+    --primary-color-dark: #45a049;
+    --light-gray: #f4f4f4;
+    --medium-gray: #e0e0e0;
+    --dark-gray: #333;
+    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Changed for longer content */
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    width: 100%;
+    max-width: 450px; /* This is our mobile-first width */
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.header-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-header h1 {
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-header p {
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+    color: #555;
+}
+
+.search-box, .select-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 0.75rem;
+    padding-left: 2.5rem; /* Space for icon */
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    appearance: none; /* Removes default dropdown arrow */
+    -webkit-appearance: none;
+    background-color: #fff;
+}
+
+select {
+    padding-left: 1rem; /* No icon in select */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.search-box i {
+    position: absolute;
+    left: 1rem;
+    color: #999;
+}
+
+.results-container {
+    background-color: #f9f9f9;
+    border: 1px dashed var(--medium-gray);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+}
+
+#nutrientInfo h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.nutrients-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr; /* Was '1fr 1fr' */
+    gap: 1rem;
+}
+
+.nutrient-item {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nutrient-item i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.nutrient-item .label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.nutrient-item .value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+#micronutrientDetails {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+#micronutrientDetails h4 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+#micronutrientDetails ul {
+    list-style-type: none;
+    padding: 0;
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    column-gap: 2rem;
+}
+
+#micronutrientDetails li {
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+#micronutrientDetails li strong {
+    color: #555;
+    font-weight: 400;
+}
+
+#micronutrientDetails li span {
+    font-weight: 600;
+}
+
+/* ... (keep all the existing CSS the same) ... */
+
+/* ADD THESE NEW STYLES AT THE END OF THE FILE */
+
+#foodListContainer {
+    margin-top: 2rem;
+}
+
+#foodList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 400px; /* Crucial: This makes the container scrollable */
+    overflow-y: auto;  /* Enables vertical scrolling */
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    background-color: #fdfdfd;
+}
+
+#foodList li {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+    font-size: 0.95rem;
+}
+
+#foodList li:last-child {
+    border-bottom: none;
+}
+
+#foodList li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Style for the currently selected item in the list */
+#foodList li.active {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+/* Make the scrollbar less obtrusive (optional but nice) */
+#foodList::-webkit-scrollbar {
+  width: 8px;
+}
+#foodList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+#foodList::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 8px;
+}
+#foodList::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* ... (keep all the existing CSS the same) ... */
+
+/* ADD THESE NEW STYLES AT THE END OF THE FILE */
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.list-header label {
+    margin-bottom: 0; /* Override default margin */
+}
+
+.sort-btn {
+    background-color: #f0f0f0;
+    border: 1px solid var(--medium-gray);
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    color: #555;
+}
+
+.sort-btn:hover {
+    background-color: var(--medium-gray);
+}
+
+.sort-btn i {
+    margin-right: 0.4rem;
+}
+
+/* ADD THESE NEW STYLES AT THE END OF THE FILE */
+
+/* Make the special calorie item span all 4 columns of our grid */
+.calorie-item {
+    grid-column: 1 / -1;
+    background-color: var(--primary-color);
+    color: white;
+    flex-direction: row; /* Align icon and text horizontally */
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+/* Style the text inside the special calorie item */
+.calorie-item .label {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.calorie-item .value {
+    color: white;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+/* Make the icon bigger and whiter */
+.calorie-item i {
+    color: white;
+    font-size: 2.2rem;
+    margin: 0;
+}
+
+/* ------------------------------------------- */
+/* NEW DESKTOP STYLES USING A MEDIA QUERY      */
+/* ------------------------------------------- */
+@media (min-width: 992px) {
+    .card {
+        max-width: 960px; /* Make the card wider on desktop */
+    }
+
+    .card-body {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr; /* Create two columns */
+        gap: 3rem; /* Add space between the columns */
+        align-items: flex-start;
+        padding: 2.5rem;
+    }
+
+    /* The right panel for results */
+    .results-panel {
+        position: sticky; /* Makes the results stick as you scroll */
+        top: 2rem;
+    }
+}
+
+/* Minor responsive adjustment for smaller phones */
+@media (max-width: 500px) {
+    body {
+        padding: 1rem;
+    }
+    .card-body, .card-header {
+        padding: 1.5rem;
+    }
+}

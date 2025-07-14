@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriFinder</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <header class="card-header">
+            <i class="fas fa-leaf header-icon"></i>
+            <h1>NutriFinder</h1>
+            <p>Select a food to see its nutritional information.</p>
+        </header>
+
+        <!-- The card-body will now be a grid container on desktop -->
+        <main class="card-body">
+            
+            <!-- NEW: Panel for all user inputs -->
+            <div class="controls-panel">
+              <!-- ... (keep all the code above this the same) ... -->
+
+            <!-- NEW: Panel for all user inputs -->
+            <div class="controls-panel">
+                <div class="input-group">
+                    <label for="searchInput">Search Food</label>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search for a food item...">
+                    </div>
+                </div>
+
+                <!-- The Food Dropdown has been removed -->
+
+                <div class="input-group" id="foodListContainer">
+                    <!-- ADDED a header for the list with a sort button -->
+                    <div class="list-header">
+                        <label>Select from all foods</label>
+                        <button id="sortButton" class="sort-btn">
+                            <i class="fas fa-sort-alpha-down"></i> Sort A-Z
+                        </button>
+                    </div>
+                    <ul id="foodList">
+                        <!-- Food items will be dynamically inserted here -->
+                    </ul>
+                </div>
+
+                <div class="input-group">
+                    <label for="measureDropdown">Select Serving Size</label>
+                    <div class="select-box">
+                        <select id="measureDropdown"></select>
+                    </div>
+                </div>
+            </div>
+
+<!-- ... (keep all the code below this the same) ... -->
+            </div>
+
+            <!-- NEW: Panel for all results -->
+            <div class="results-panel">
+                <div class="results-container" id="nutrientInfo">
+                    <!-- Macronutrient info will be dynamically inserted here -->
+                </div>
+                
+                <div id="micronutrientDetails">
+                    <!-- Micronutrient info will be dynamically inserted here -->
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
