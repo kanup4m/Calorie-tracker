@@ -331,6 +331,38 @@ input[type="text"]:focus, select:focus {
     margin: 0;
 }
 
+
+.serving-controls {
+    display: flex;
+    gap: 1rem; /* Space between the two inputs */
+    align-items: flex-end; /* Aligns the bottom of the inputs */
+    margin-top: 2rem;
+}
+
+.measure-group {
+    flex: 3; /* Make the dropdown wider */
+    margin-bottom: 0;
+}
+
+.quantity-group {
+    flex: 1; /* Make the quantity input narrower */
+    margin-bottom: 0;
+}
+
+#quantityInput {
+    padding-left: 1rem !important; /* Override the icon padding */
+    font-size: 1rem;
+    width: 100%;
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    padding: 0.75rem;
+}
+#quantityInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
 /* ------------------------------------------- */
 /* NEW DESKTOP STYLES USING A MEDIA QUERY      */
 /* ------------------------------------------- */

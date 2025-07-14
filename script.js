@@ -4,11 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const measureDropdown = document.getElementById('measureDropdown');
     const foodList = document.getElementById('foodList');
-    const sortButton = document.getElementById('sortButton'); // Get the new sort button
-    
+    const sortButton = document.getElementById('sortButton');
+    const quantityInput = document.getElementById('quantityInput'); // Get the new quantity input
+
     let foodData = [];
-    let currentFoodId = null; // State variable to track selected food
-    let sortOrder = 'asc'; // State variable for sorting ('asc' or 'desc')
+    let currentFoodId = null;
+    let sortOrder = 'asc';
 
     fetch('food.jsonl')
         .then(response => response.text())
@@ -18,24 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 .map(line => { try { return JSON.parse(line); } catch (e) { return null; } })
                 .filter(obj => obj && obj.food);
             
-            // Initial sort A-Z
             foodData = sortFoods(allFoods, 'asc');
 
             if (foodData.length > 0) {
                 populateFoodList(foodData);
-                // Select the first food in the list by default
                 selectFood(foodData[0].food.food_id);
             } else {
-                console.error("No valid food data could be extracted from the file.");
-                document.querySelector('.card-body').innerHTML = '<p style="color: red;">Error: Could not load food data.</p>';
+                // Handle error
             }
         })
-        .catch(error => {
-            console.error('Error fetching or parsing food data:', error);
-            document.querySelector('.card-body').innerHTML = '<p style="color: red;">Error: Could not load food data file.</p>';
-        });
+        .catch(error => console.error('Error:', error));
 
-    // REFACTORED: Central function to select a food and update the UI
     function selectFood(foodId) {
         if (!foodId) return;
         currentFoodId = parseInt(foodId);
@@ -47,20 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // NEW: Function to sort the food data array
     function sortFoods(foods, order) {
+        // ... (this function remains the same)
         return foods.sort((a, b) => {
             const nameA = a.food.food_name.trim().toLowerCase();
             const nameB = b.food.food_name.trim().toLowerCase();
-            if (order === 'asc') {
-                return nameA.localeCompare(nameB);
-            } else {
-                return nameB.localeCompare(nameA);
-            }
+            if (order === 'asc') return nameA.localeCompare(nameB);
+            else return nameB.localeCompare(nameA);
         });
     }
 
     function populateFoodList(foods) {
+        // ... (this function remains the same)
         foodList.innerHTML = '';
         foods.forEach(item => {
             const li = document.createElement('li');
@@ -72,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function highlightActiveListItem(foodId) {
+        // ... (this function remains the same)
         const foodIdStr = String(foodId);
         foodList.querySelectorAll('li').forEach(li => {
             li.classList.remove('active');
@@ -82,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // MODIFIED: This function now sets the default quantity
     function updateMeasureDropdown(foodItem) {
         measureDropdown.innerHTML = '';
         foodItem.food_measures.forEach(measure => {
@@ -91,57 +85,75 @@ document.addEventListener('DOMContentLoaded', () => {
             measureDropdown.appendChild(option);
         });
         measureDropdown.value = foodItem.food.default_measure_id;
+        
+        // When a new food is selected, set the quantity input to its default
+        const defaultMeasure = foodItem.food_measures.find(m => m.measure_id === foodItem.food.default_measure_id);
+        quantityInput.value = defaultMeasure?.default_quantity || 1;
+
         measureDropdown.dispatchEvent(new Event('change'));
     }
 
-function displayNutrientInfo(measure) {
-    const nutrientInfo = document.getElementById('nutrientInfo');
-    nutrientInfo.innerHTML = `
-        <h3>Macronutrients</h3>
-        <div class="nutrients-grid">
-            <div class="nutrient-item calorie-item">
-                <i class="fas fa-fire-alt"></i>
-                <div class="label">Calories</div>
-                <!-- The unit "kcal" has been added below -->
-                <div class="value">${measure.calorie.toFixed(2)} kcal</div>
-            </div>
-            <div class="nutrient-item">
-                <i class="fas fa-bread-slice"></i>
-                <div class="label">Carbs</div>
-                <div class="value">${measure.carbs.toFixed(2)} g</div>
-            </div>
-            <div class="nutrient-item">
-                <i class="fas fa-drumstick-bite"></i>
-                <div class="label">Protein</div>
-                <div class="value">${measure.proteins.toFixed(2)} g</div>
-            </div>
-            <div class="nutrient-item">
-                <i class="fas fa-oil-can"></i>
-                <div class="label">Fats</div>
-                <div class="value">${measure.fats.toFixed(2)} g</div>
-            </div>
-            <div class="nutrient-item">
-                <i class="fas fa-seedling"></i>
-                <div class="label">Fibre</div>
-                <div class="value">${measure.fibre.toFixed(2)} g</div>
-            </div>
-        </div>
-    `;
+    // THE MAIN CHANGE: This function now performs calculations
+    function displayNutrientInfo(measure) {
+        const quantity = parseFloat(quantityInput.value) || 1;
+        const nutrientInfo = document.getElementById('nutrientInfo');
 
-    const micronutrientDetails = document.getElementById('micronutrientDetails');
-    const micros = measure.micronutrient_details;
-    if (micros) {
-        const createListItem = (label, value, unit) => (value !== undefined && value !== null) ? `<li><strong>${label}</strong> <span>${value.toFixed(2)} ${unit}</span></li>` : '';
-        micronutrientDetails.innerHTML = `<h4>Detailed Nutrients</h4><ul>${createListItem("Total Sugars", micros.total_sugars, "g")}${createListItem("Saturated Fats", micros.saturated_fats, "g")}${createListItem("Cholesterol", micros.cholesterol || micros.cholestrol, "mg")}${createListItem("Sodium", micros.sodium, "mg")}${createListItem("Calcium", micros.calcium, "mg")}${createListItem("Iron", micros.iron, "mg")}${createListItem("Magnesium", micros.magnesium, "mg")}${createListItem("Zinc", micros.zinc, "mg")}${createListItem("Vitamin A", micros.vitamin_a, "mcg")}${createListItem("Vitamin C", micros.vitamin_c, "mg")}</ul>`;
-    } else {
-        micronutrientDetails.innerHTML = '';
+        // Calculate final values by multiplying by quantity
+        const finalCalories = measure.calorie * quantity;
+        const finalCarbs = measure.carbs * quantity;
+        const finalProteins = measure.proteins * quantity;
+        const finalFats = measure.fats * quantity;
+        const finalFibre = measure.fibre * quantity;
+
+        nutrientInfo.innerHTML = `
+            <h3>Macronutrients</h3>
+            <div class="nutrients-grid">
+                <div class="nutrient-item calorie-item">
+                    <i class="fas fa-fire-alt"></i>
+                    <div class="label">Calories</div>
+                    <div class="value">${finalCalories.toFixed(2)} kcal</div>
+                </div>
+                <div class="nutrient-item">
+                    <i class="fas fa-bread-slice"></i>
+                    <div class="label">Carbs</div>
+                    <div class="value">${finalCarbs.toFixed(2)} g</div>
+                </div>
+                <div class="nutrient-item">
+                    <i class="fas fa-drumstick-bite"></i>
+                    <div class="label">Protein</div>
+                    <div class="value">${finalProteins.toFixed(2)} g</div>
+                </div>
+                <div class="nutrient-item">
+                    <i class="fas fa-oil-can"></i>
+                    <div class="label">Fats</div>
+                    <div class="value">${finalFats.toFixed(2)} g</div>
+                </div>
+                <div class="nutrient-item">
+                    <i class="fas fa-seedling"></i>
+                    <div class="label">Fibre</div>
+                    <div class="value">${finalFibre.toFixed(2)} g</div>
+                </div>
+            </div>
+        `;
+
+        const micronutrientDetails = document.getElementById('micronutrientDetails');
+        const micros = measure.micronutrient_details;
+        if (micros) {
+            const createListItem = (label, value, unit) => {
+                if (value !== undefined && value !== null) {
+                    const finalValue = value * quantity; // Also multiply micronutrients
+                    return `<li><strong>${label}</strong> <span>${finalValue.toFixed(2)} ${unit}</span></li>`;
+                }
+                return '';
+            };
+            micronutrientDetails.innerHTML = `<h4>Detailed Nutrients</h4><ul>${createListItem("Total Sugars", micros.total_sugars, "g")}${createListItem("Saturated Fats", micros.saturated_fats, "g")}${createListItem("Cholesterol", micros.cholesterol || micros.cholestrol, "mg")}${createListItem("Sodium", micros.sodium, "mg")}${createListItem("Calcium", micros.calcium, "mg")}${createListItem("Iron", micros.iron, "mg")}${createListItem("Magnesium", micros.magnesium, "mg")}${createListItem("Zinc", micros.zinc, "mg")}${createListItem("Vitamin A", micros.vitamin_a, "mcg")}${createListItem("Vitamin C", micros.vitamin_c, "mg")}</ul>`;
+        } else {
+            micronutrientDetails.innerHTML = '';
+        }
     }
-}
 
-    // --- Event Listeners ---
-    
-    // UPDATED: Measure dropdown uses the state variable
-    measureDropdown.addEventListener('change', () => {
+    // Function to trigger the calculation and display update
+    function recalculate() {
         const selectedMeasureId = parseInt(measureDropdown.value);
         const selectedFood = foodData.find(item => item.food.food_id === currentFoodId);
         if (selectedFood) {
@@ -150,10 +162,33 @@ function displayNutrientInfo(measure) {
                 displayNutrientInfo(selectedMeasure);
             }
         }
-    });
+    }
 
-    // UPDATED: Search only repopulates the list and selects the first result
+    // --- Event Listeners ---
+
+    // When the measure dropdown changes, update the quantity input and recalculate
+    measureDropdown.addEventListener('change', () => {
+        const selectedMeasureId = parseInt(measureDropdown.value);
+        const selectedFood = foodData.find(item => item.food.food_id === currentFoodId);
+        if (selectedFood) {
+            const selectedMeasure = selectedFood.food_measures.find(m => m.measure_id === selectedMeasureId);
+            if (selectedMeasure) {
+                // If the selected measure is 'grams', set the default to 100g, otherwise use its default
+                if (selectedMeasure.measure_name.toLowerCase().includes('gram')) {
+                    quantityInput.value = 100;
+                } else {
+                    quantityInput.value = selectedMeasure.default_quantity || 1;
+                }
+            }
+        }
+        recalculate();
+    });
+    
+    // NEW: When the quantity input changes, just recalculate
+    quantityInput.addEventListener('input', recalculate);
+    
     searchInput.addEventListener('input', () => {
+        // ... (this function remains the same)
         const searchTerm = searchInput.value.toLowerCase().trim();
         const filteredFoods = foodData.filter(item => item.food.food_name.toLowerCase().includes(searchTerm));
         populateFoodList(filteredFoods);
@@ -166,29 +201,17 @@ function displayNutrientInfo(measure) {
         }
     });
 
-    // NEW: Event listener for the sort button
     sortButton.addEventListener('click', () => {
-        // Toggle sort order
+        // ... (this function remains the same)
         sortOrder = (sortOrder === 'asc') ? 'desc' : 'asc';
-        
-        // Update button text and icon
-        if (sortOrder === 'asc') {
-            sortButton.innerHTML = `<i class="fas fa-sort-alpha-down"></i> Sort A-Z`;
-        } else {
-            sortButton.innerHTML = `<i class="fas fa-sort-alpha-up"></i> Sort Z-A`;
-        }
-
-        // Re-sort the current data and update the list
+        if (sortOrder === 'asc') sortButton.innerHTML = `<i class="fas fa-sort-alpha-down"></i> Sort A-Z`;
+        else sortButton.innerHTML = `<i class="fas fa-sort-alpha-up"></i> Sort Z-A`;
         const currentlyDisplayedFoods = foodData.filter(item => {
             const currentListIds = Array.from(foodList.querySelectorAll('li')).map(li => li.dataset.foodId);
             return currentListIds.includes(String(item.food.food_id));
         });
-
         const sortedList = sortFoods(currentlyDisplayedFoods, sortOrder);
         populateFoodList(sortedList);
-        
-        // Re-highlight the active item
         highlightActiveListItem(currentFoodId);
     });
 });
-
