@@ -363,6 +363,14 @@ input[type="text"]:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
 
+.info-item {
+    padding: 1rem;
+    text-align: center;
+    color: #888;
+    cursor: default !important;
+    background-color: transparent !important;
+}
+
 
 /* ------------------------------------------- */
 /* NEW DESKTOP STYLES USING A MEDIA QUERY      */
