@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (fileCache.has(fileNumber)) return fileCache.get(fileNumber);
         const start = Math.floor(fileNumber / 5000) * 5000;
         const end = start + 4999;
-        const filename = `data/food_data_${start}-${end}.jsonl`;
+        const filename = `Data/food_data_${start}-${end}.jsonl`;
         try {
             const response = await fetch(filename);
             const text = await response.text();
